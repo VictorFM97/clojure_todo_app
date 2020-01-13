@@ -3,8 +3,8 @@
             [ring.util.response :refer [response]]
             [compojure.core :refer [defroutes context GET POST]]
             [compojure.route :refer [not-found]]
-            ; [compojure.coercions :refer [as-int]]
-            [todo-app.tasks :as tasks]))
+            [compojure.coercions :refer [as-int]]
+            [todo-app.tasks-business :as tasks]))
 
 (defn format-response
   "Format the response of the request"
@@ -14,11 +14,11 @@
 (defroutes routes
   (context "/api" []
     (context "/todo" []
-      (POST "/add" req
-        (tasks/add! (:body req)))
-      (GET "/all" []
-        (tasks/get-all)))
-    ;   (context "/:id{[0-9]+}" [id :<< as-int])
+      (context "/:id{[0-9]+}" [id :<< as-int]
+        (POST "/add" req (tasks/add! (:body req)))
+        (GET "/most-recent" [] (tasks/get-most-recent id))
+        (GET "/all" [] (tasks/get-all id))))
+    (context "/profile" [])
     (not-found "404 not found")))
 
 (def api (-> routes
