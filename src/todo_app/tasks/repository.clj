@@ -1,6 +1,6 @@
-(ns todo-app.tasks-repository)
+(ns todo-app.tasks.repository)
 
-(defrecord Task [id profile-id title description creation-date])
+(defrecord Task [id profile-id title description creation-date done deleted])
 (def tasks (atom []))
 
 (defn get-last-id
@@ -15,16 +15,13 @@
   (let [{profile-id :profile-id title :title description :description} task
         date (java.util.Date.)
         id (get-last-id)]
-    (swap! tasks conj (->Task id profile-id title description date))
+    (swap! tasks conj (->Task id profile-id title description date false false))
     (last @tasks)))
 
-(defn remove!
-  [id]
-  nil)
+(defn update!
+  [id key value]
+  (swap! tasks update-in [(dec id)] assoc key value))
 
 (defn order-by
   [func]
   (filter func @tasks))
-
-(defn get-all []
-  @tasks)
