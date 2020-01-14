@@ -4,7 +4,7 @@
             [compojure.core :refer [defroutes context GET POST]]
             [compojure.route :refer [not-found]]
             [compojure.coercions :refer [as-int]]
-            [todo-app.tasks-business :as tasks]))
+            [todo-app.tasks.business :as tasks]))
 
 (defn format-response
   "Format the response of the request"
