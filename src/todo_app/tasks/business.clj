@@ -35,7 +35,7 @@
 (defn update!
   [id key value]
   (let [ret (execute-action
-             (is-deleted? id)
+             (is-deleted? (get-by-id id))
              #(repo/update! id key value)
              "Task is already deleted")]
     (if (string? ret)
