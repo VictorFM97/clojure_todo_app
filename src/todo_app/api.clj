@@ -14,8 +14,8 @@
 (defroutes routes
   (context "/api" []
     (context "/todo" []
-      (POST "/add" req (tasks/add! (:body req)))
-      (DELETE "/delete" req (tasks/update! (:id (:body req)) :deleted true))
+      (POST "/add" req (format-response (tasks/add! (:body req))))
+      (DELETE "/delete" req (format-response (tasks/update! (:id (:body req)) :deleted true)))
       (PUT "/done/" req (tasks/update!) (:id req) :done (:done req))
       (context "/:id{[0-9]+}" [id :<< as-int]
         (GET "/most-recent" [] (tasks/get-most-recent id))
@@ -23,6 +23,8 @@
         (GET "/" [] (tasks/get-by-id id))))
     (context "/profile" [])
     (not-found "404 not found")))
+
+; find better way to format responses 
 
 (def api (-> routes
              (wrap-json-body {:keywords? true})
