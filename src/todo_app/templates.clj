@@ -1,5 +1,23 @@
 (ns todo-app.templates
   (:require [hiccup.core :refer [html]]))
 
+(defn render-html [content]
+  (html [:html
+         [:head]
+         [:body
+          content]
+         [:script {:src "/js/form.js" :type "text/javascript"}]]))
+
+(defn profile []
+  (html [:h2 "Please insert your name"]
+        [:input.test]))
+
+(defn todo-list []
+  (html [:div.todo-list
+         [:button.add-task "+"]
+         [:ul
+          (for [x (range 1 4)]
+            [:li x])]]))
+
 (defn index []
-  (html [:span "hi"]))
+  (render-html (html [:div (profile) (todo-list)])))

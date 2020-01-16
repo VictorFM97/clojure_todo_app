@@ -9,7 +9,7 @@
 (defn format-response
   "Format the response of the request"
   [data]
-  (response {:success true :data data}))
+  (response data))
 
 (defroutes routes
   (context "/api" []
@@ -24,7 +24,7 @@
     (context "/profile" [])
     (not-found "404 not found")))
 
-; find better way to format responses 
+; find better way to format response
 
 (def api (-> routes
              (wrap-json-body {:keywords? true})

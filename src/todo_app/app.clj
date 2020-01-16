@@ -1,17 +1,15 @@
 (ns todo-app.app
-  (:require [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
-            [compojure.core :refer [defroutes context GET]]
-            [compojure.route :refer [not-found]]
+  (:require [compojure.core :refer [defroutes context GET]]
+            [compojure.route :refer [not-found resources]]
             [todo-app.templates :as templates]))
 
 (defroutes routes
   (GET "/" [] (templates/index))
   (context "/todo" []
-    (not-found "404 not found")))
+    (not-found "404 not found"))
+  (resources "/"))
 
-(def app (-> routes
-             (wrap-json-body {:keywords? true})
-             (wrap-json-response)))
+(def app routes)
 
 (defn create-app
   []
