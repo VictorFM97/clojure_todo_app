@@ -9,8 +9,10 @@
          [:script {:src "/js/form.js" :type "text/javascript"}]]))
 
 (defn profile []
-  (html [:h2 "Please insert your name"]
-        [:input.test]))
+  (html
+   [:h2 "Please insert your name"]
+   [:input#name {:type "text"}]
+   [:button#create-profile "Submit"]))
 
 (defn todo-list []
   (html [:div.todo-list

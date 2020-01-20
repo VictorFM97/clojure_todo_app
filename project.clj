@@ -7,6 +7,7 @@
                  [compojure "1.6.1"]
                  [ring "1.7.1"]
                  [ring/ring-json "0.4.0"]
+                 [ring-cors "0.1.13"]
                  [org.clojure/data.json "0.2.6"]
                  [hiccup "1.0.5"]]
   :main todo-app.core

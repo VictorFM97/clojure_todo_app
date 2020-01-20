@@ -11,8 +11,22 @@ const httpRequest = (endpoint, options, callback) => {
     };
 
     Http.open(options.method, url);
-    Http.send();
+
+    if (options.contentType)
+        Http.setRequestHeader("content-type", options.contentType);
+
+    Http.send(JSON.stringify(options.body));
 };
+
+const getValueFromInput = (inputName) => (document.querySelector(inputName).value)
+
+document.querySelector("#create-profile").addEventListener('click', () => {
+    let obj = {
+        name: getValueFromInput("#name")
+    };
+
+    httpRequest("profile/add", { body: obj, contentType: "application/json", method: "POST" });
+});
 
 document.querySelectorAll('input').forEach((x) => {
     x.addEventListener('focusout', () => {
