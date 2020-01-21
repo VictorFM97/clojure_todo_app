@@ -11,7 +11,9 @@
 (defn profile []
   (html
    [:h2 "Please insert your name"]
-   [:input#name {:type "text"}]
+   [:div
+    [:input#name-input {:type "text"}]
+    [:span#name-text]]
    [:button#create-profile "Submit"]))
 
 (defn todo-list []

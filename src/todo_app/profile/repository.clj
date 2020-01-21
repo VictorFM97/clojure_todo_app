@@ -3,6 +3,10 @@
 (defrecord Profile [id name creation-date])
 (def profiles (atom []))
 
+(defn order-by
+  [pred]
+  (filter pred @profiles))
+
 (defn get-last-id
   []
   (let [id (:id (last @profiles))]

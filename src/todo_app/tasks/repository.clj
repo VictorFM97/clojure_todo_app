@@ -3,6 +3,10 @@
 (defrecord Task [id profile-id title description creation-date done deleted])
 (def tasks (atom []))
 
+(defn order-by
+  [func]
+  (filter func @tasks))
+
 (defn get-last-id
   []
   (let [id (:id (last @tasks))]
@@ -21,7 +25,3 @@
 (defn update!
   [id key value]
   (swap! tasks update-in [(dec id)] assoc key value))
-
-(defn order-by
-  [func]
-  (filter func @tasks))

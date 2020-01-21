@@ -16,7 +16,9 @@
 (defroutes routes
   (context "/api" []
     (context "/profile" []
-      (POST "/add" req (format-response (profiles/add! (:body req)))))
+      (POST "/add" req (format-response (profiles/add! (:body req))))
+      (context "/:id{[0-9]+}" [id :<< as-int]
+        (GET "/" [] (format-response (profiles/get-by-id id)))))
     (context "/todo" []
       (POST "/add" req (format-response (tasks/add! (:body req))))
       (DELETE "/delete" req (format-response (tasks/update! (:id (:body req)) :deleted true)))
@@ -25,7 +27,6 @@
         (GET "/most-recent" [] (tasks/get-most-recent id))
         (GET "/all" [] (tasks/get-all id))
         (GET "/" [] (tasks/get-by-id id))))
-    (context "/profile" [])
     (not-found "404 not found")))
 
 ; find better way to format response

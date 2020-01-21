@@ -11,12 +11,12 @@
   #(= id (:profile-id %)))
 
 (defn get-all
-  [id-profile]
-  (filter-tasks (base-filter id-profile)))
+  [profile-id]
+  (filter-tasks (base-filter profile-id)))
 
 (defn get-most-recent
-  [id-profile]
-  (last (filter-tasks (base-filter id-profile))))
+  [profile-id]
+  (last (get-all profile-id)))
 
 (defn get-by-id
   [id]
