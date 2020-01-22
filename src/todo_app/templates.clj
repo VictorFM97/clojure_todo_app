@@ -17,7 +17,7 @@
    [:button#create-profile "Submit"]))
 
 (defn todo-list []
-  (html [:div.todo-list
+  (html [:div.todo-list {:style "display: none"}
          [:button.add-task "+"]
          [:ul
           (for [x (range 1 4)]

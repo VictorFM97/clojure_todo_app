@@ -36,6 +36,7 @@ $("#create-profile").addEventListener('click', () => {
         $("#name-text").innerText = addedProfile.name;
         setCookie('profileId', addedProfile.id);
         profileId = addedProfile.id;
+        enableProfile(profileId);
     };
 
     const options = {
@@ -57,6 +58,25 @@ $('.add-task').addEventListener('click', () =>
     console.log('add')
 );
 
+const enableProfile = (profileId, findProfile) => {
+    $("#name-input").style.display = 'none';
+    $("#create-profile").style.display = 'none';
+    $(".todo-list").style.display = 'block';
+
+    if (findProfile) {
+        const options = {
+            method: 'GET'
+        }
+
+        const handleLoggedIn = (response) => {
+            const profile = JSON.parse(response.responseText);
+            $("#name-text").innerText = profile.name;
+        };
+
+        httpRequest('profile/' + profileId, options, handleLoggedIn);
+    }
+}
+
 const setCookie = (name, value, expiration) => {
     document.cookie += name + '=' + value + ';';
 }
@@ -75,18 +95,5 @@ const getCookie = (name) => {
 
 profileId = parseInt(getCookie('profileId'));
 
-if (!isNaN(profileId)) {
-    $("#name-input").style.display = 'none';
-    $("#create-profile").style.display = 'none';
-
-    const options = {
-        method: 'GET'
-    }
-
-    const handleLoggedIn = (response) => {
-        const profile = JSON.parse(response.responseText);
-        $("#name-text").innerText = profile.name;
-    };
-
-    httpRequest('profile/' + profileId, options, handleLoggedIn);
-}
+if (!isNaN(profileId))
+    enableProfile(profileId, true);
