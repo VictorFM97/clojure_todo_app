@@ -70,10 +70,8 @@ $('.add-task').addEventListener('click', () => {
         method: 'POST'
     }
 
-    console.log(options);
-
     const handlerAddTask = (response) => {
-        const task = JSON.parse(response.resposeText);
+        const task = JSON.parse(response.responseText);
         $(".todo-list ul").append(createTaskElement(task));
     }
 
@@ -126,7 +124,6 @@ const getCookie = (name) => {
 }
 
 const createTaskElement = (task) => {
-    console.log(task);
     const li = document.createElement("li");
     const p_title = document.createElement("p");
     const p_description = document.createElement("p");
