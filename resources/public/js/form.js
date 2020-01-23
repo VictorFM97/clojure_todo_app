@@ -3,7 +3,6 @@
 const baseUrl = 'http://localhost:8001/api/';
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
-let profileId = 0;
 
 const httpRequest = (endpoint, options, callback) => {
     const Http = new XMLHttpRequest();
@@ -35,8 +34,7 @@ $("#create-profile").addEventListener('click', () => {
 
         $("#name-text").innerText = addedProfile.name;
         setCookie('profileId', addedProfile.id);
-        profileId = addedProfile.id;
-        enableProfile(profileId);
+        enableProfile(addedProfile.id);
     };
 
     const options = {
@@ -48,21 +46,41 @@ $("#create-profile").addEventListener('click', () => {
     httpRequest("profile/add", options, handleProfileCreation);
 });
 
-$$('input').forEach((x) => {
-    x.addEventListener('focusout', () => {
-        //httpRequest("todo/1/all", { method: "GET" });
-    });
+$('.add-task').addEventListener('click', () => {
+    const profileId = getCookie('profileId');
+
+    if (!profileId)
+        return alert('ababa');
+
+    const title = getValueFromInput('#task-title');
+    const description = getValueFromInput('#task-description');
+
+    if (!title || !description)
+        return alert('Title and Description must be filled');
+
+    const body = {
+        'profile-id': parseInt(profileId),
+        'title': title,
+        'description': description
+    };
+
+    const options = {
+        body,
+        contentType: 'application/json',
+        method: 'POST'
+    }
+
+    console.log(options);
+
+    const handlerAddTask = (response) => {
+        const task = JSON.parse(response.resposeText);
+        $(".todo-list ul").append(createTaskElement(task));
+    }
+
+    httpRequest('todo/add', options, handlerAddTask);
 });
 
-$('.add-task').addEventListener('click', () =>
-    console.log('add')
-);
-
 const enableProfile = (profileId, findProfile) => {
-    $("#name-input").style.display = 'none';
-    $("#create-profile").style.display = 'none';
-    $(".todo-list").style.display = 'block';
-
     if (findProfile) {
         const options = {
             method: 'GET'
@@ -74,7 +92,21 @@ const enableProfile = (profileId, findProfile) => {
         };
 
         httpRequest('profile/' + profileId, options, handleLoggedIn);
+
+        const handleFindTasks = (response) => {
+            const tasks = JSON.parse(response.responseText);
+            const a = tasks.map((t) => createTaskElement(t));
+            const list = $('.todo-list ul');
+            for (let i = 0; i < a.length; i++)
+                list.append(a[i]);
+        }
+
+        httpRequest('todo/' + profileId + '/all', options, handleFindTasks);
     }
+
+    $("#name-input").style.display = 'none';
+    $("#create-profile").style.display = 'none';
+    $(".todo-list").style.display = 'block';
 }
 
 const setCookie = (name, value, expiration) => {
@@ -93,7 +125,29 @@ const getCookie = (name) => {
     }
 }
 
-profileId = parseInt(getCookie('profileId'));
+const createTaskElement = (task) => {
+    console.log(task);
+    const li = document.createElement("li");
+    const p_title = document.createElement("p");
+    const p_description = document.createElement("p");
+    const button_update = document.createElement("button");
+    const button_delete = document.createElement("button");
 
-if (!isNaN(profileId))
-    enableProfile(profileId, true);
+    p_title.innerText = task.title;
+    p_description.innerText = task.description;
+    button_update.innerText = "Save";
+    button_delete.innerText = "Delete";
+
+    button_update.setAttribute('task-id', task.id);
+    button_delete.setAttribute('task-id', task.id);
+
+    li.append(p_title, p_description, button_update, button_delete);
+    return li;
+}
+
+{
+    const profileId = parseInt(getCookie('profileId'));
+
+    if (!isNaN(profileId))
+        enableProfile(profileId, true);
+}

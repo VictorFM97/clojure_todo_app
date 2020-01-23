@@ -8,30 +8,24 @@
             [todo-app.tasks.business :as tasks]
             [todo-app.profile.business :as profiles]))
 
-(defn format-response
-  "Format the response of the request"
-  [data]
-  (response data))
-
 (defroutes routes
   (context "/api" []
     (context "/profile" []
-      (POST "/add" req (format-response (profiles/add! (:body req))))
+      (POST "/add" req (response (profiles/add! (:body req))))
       (context "/:id{[0-9]+}" [id :<< as-int]
-        (GET "/" [] (format-response (profiles/get-by-id id)))))
+        (GET "/" [] (response (profiles/get-by-id id)))))
     (context "/todo" []
-      (POST "/add" req (format-response (tasks/add! (:body req))))
-      (DELETE "/delete" req (format-response (tasks/update! (:id (:body req)) :deleted true)))
+      (POST "/add" req (response (tasks/add! (:body req))))
+      (DELETE "/delete" req (response (tasks/update! (:id (:body req)) :deleted true)))
       (PUT "/done/" req (tasks/update!) (:id req) :done (:done req))
       (context "/:id{[0-9]+}" [id :<< as-int]
         (GET "/most-recent" [] (tasks/get-most-recent id))
-        (GET "/all" [] (tasks/get-all id))
+        (GET "/all" [] (response (tasks/get-all id)))
         (GET "/" [] (tasks/get-by-id id))))
     (not-found "404 not found")))
 
-; find better way to format response
-
 (def api (-> routes
+            ;  (defaults/wrap-defaults defaults/api-defaults)
              (wrap-json-body {:keywords? true})
              (wrap-json-response)
              (wrap-cors :access-control-allow-origin [#"http://localhost:8000"]

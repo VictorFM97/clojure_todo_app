@@ -18,10 +18,19 @@
 
 (defn todo-list []
   (html [:div.todo-list {:style "display: none"}
+         [:div.input-group
+          [:input#task-title {:type "text"}]]
+         [:div.input-group
+          [:input#task-description {:type "text"}]]
          [:button.add-task "+"]
-         [:ul
-          (for [x (range 1 4)]
-            [:li x])]]))
+         [:ul]]))
+
+(defn todo-list-element [{title :title description :description}]
+  (html [:li
+         [:p title]
+         [:p description]
+         [:button "Save"]
+         [:button "Delete"]]))
 
 (defn index []
   (render-html (html [:div (profile) (todo-list)])))
