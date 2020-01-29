@@ -3,9 +3,8 @@
 (defrecord Profile [id name creation-date])
 (def profiles (atom []))
 
-(defn order-by
-  [pred]
-  (filter pred @profiles))
+(defn get-profiles []
+  @profiles)
 
 (defn add!
   [profile]
@@ -15,5 +14,5 @@
     (swap! profiles conj (->Profile id name date)))
   (last @profiles))
 
-(defn profiles-thing []
-  @profiles)
+(defn clear! []
+  (reset! profiles []))
