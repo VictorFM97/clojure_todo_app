@@ -1,10 +1,12 @@
 (ns todo-app.tasks.business
   (:require [todo-app.tasks.repository :as repo]
-            [todo-app.tasks.validations :refer [is-deleted?]]))
+            [todo-app.tasks.validations :refer [deleted? valid?]]
+            [todo-app.helper :refer [response-error]]
+            [ring.util.response :refer [response]]))
 
 (defn filter-tasks
   [pred]
-  (repo/order-by pred))
+  (filter pred (repo/get-tasks)))
 
 (defn base-filter
   [id]
@@ -30,12 +32,14 @@
 
 (defn add!
   [task]
-  (repo/add! task))
+  (if (valid? task)
+    (response (repo/add! task))
+    (response-error 422 "Invalid task")))
 
 (defn update!
   [id key value]
   (let [ret (execute-action
-             (is-deleted? (get-by-id id))
+             (deleted? (get-by-id id))
              #(repo/update! id key value)
              "Task is already deleted")]
     (if (string? ret)

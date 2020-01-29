@@ -7,16 +7,13 @@
   [pred]
   (filter pred @profiles))
 
-(defn get-last-id
-  []
-  (let [id (:id (last @profiles))]
-    (if (nil? id)
-      1
-      (inc id))))
-
 (defn add!
   [profile]
   (let [{name :name} profile
-        id (get-last-id)
+        id (inc (count @profiles))
         date (java.util.Date.)]
-    (swap! profiles conj (->Profile id name date))))
+    (swap! profiles conj (->Profile id name date)))
+  (last @profiles))
+
+(defn profiles-thing []
+  @profiles)
