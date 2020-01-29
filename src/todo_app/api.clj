@@ -8,6 +8,9 @@
             [todo-app.tasks.business :as tasks]
             [todo-app.profile.business :as profiles]))
 
+; TODO: WRITE ACCEPTANCE TESTS FOLLOWING THE FLOW OF THE API
+; TODO: WRITE UNIT TESTS FOR THE REST OF THE FILES
+
 (defroutes routes
   (context "/api" []
     (context "/profile" []
@@ -24,13 +27,10 @@
         (GET "/" [] (tasks/get-by-id id))))
     (not-found "404 not found")))
 
-(def api (-> routes
-            ;  (defaults/wrap-defaults defaults/api-defaults)
+(defn create-api []
+  (-> routes
+      ; (defaults/wrap-defaults defaults/api-defaults)
              (wrap-json-body {:keywords? true})
              (wrap-json-response)
              (wrap-cors :access-control-allow-origin [#"http://localhost:8000"]
                         :access-control-allow-methods [:get :put :post :delete])))
-
-(defn create-api
-  []
-  api)
