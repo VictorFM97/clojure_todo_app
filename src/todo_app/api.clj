@@ -10,6 +10,12 @@
 
 ; TODO: WRITE ACCEPTANCE TESTS FOLLOWING THE FLOW OF THE API
 ; TODO: WRITE UNIT TESTS FOR THE REST OF THE FILES
+; TODO: Study how to write middlewares
+
+; TODO: About the responses, maybe send a :422 and handle it with a middleware or with an if, on a specific function
+; (if (keyword? resp)
+;   (invalid-entity)
+;   (response resp))
 
 (defroutes routes
   (context "/api" []
@@ -24,13 +30,15 @@
       (context "/:id{[0-9]+}" [id :<< as-int]
         (GET "/most-recent" [] (response (tasks/get-most-recent id)))
         (GET "/all" [] (response (tasks/get-all id)))
-        (GET "/" [] (response (tasks/get-by-id id)))))
-    (not-found "404 not found")))
+        (GET "/" [] (response (tasks/get-by-id id))))))
+  (not-found "404 not found"))
+
+(def api (-> routes
+      ; (defaults/wrap-defaults defaults/api-defaults)
+             (wrap-json-body {:keywords? true})
+             (wrap-json-response)
+             (wrap-cors :access-control-allow-origin [#"http://localhost:8000"]
+                        :access-control-allow-methods [:get :put :post :delete])))
 
 (defn create-api []
-  (-> routes
-      ; (defaults/wrap-defaults defaults/api-defaults)
-      (wrap-json-body {:keywords? true})
-      (wrap-json-response)
-      (wrap-cors :access-control-allow-origin [#"http://localhost:8000"]
-                 :access-control-allow-methods [:get :put :post :delete])))
+  api)

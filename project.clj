@@ -10,7 +10,7 @@
                  [ring-cors "0.1.13"]
                  [org.clojure/data.json "0.2.6"]
                  [hiccup "1.0.5"]]
-  ; :profile {:dev {:dependencies [[]]}}
+  :profiles {:dev {:dependencies [[ring/ring-mock "0.4.0"]]}}
   :main todo-app.core
   :repl-options {:init-ns todo-app.core}
   :test-paths ["test/unit" "test/acceptance"])
