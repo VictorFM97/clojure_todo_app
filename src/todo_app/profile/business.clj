@@ -1,8 +1,6 @@
 (ns todo-app.profile.business
   (:require [todo-app.profile.repository :as repo]
-            [todo-app.profile.validations :refer [valid?]]
-            [todo-app.helper :refer [response-error]]
-            [ring.util.response :refer [response]]))
+            [todo-app.profile.validations :refer [valid?]]))
 
 (defn filter-profiles
   [pred]
@@ -15,5 +13,5 @@
 (defn add!
   [profile]
   (if (valid? profile)
-    (response (repo/add! profile))
-    (response-error 422 "Invalid profile")))
+    (repo/add! profile)
+    "Invalid profile"))

@@ -10,17 +10,11 @@
 (deftest Adding
   (testing "Add! function"
     (testing "Doesn't insert with missing title"
-      (is (=
-           (:status (b/add! {:description "abc" :profile-id 1}))
-           422)))
+      (is (= (b/add! {:description "abc" :profile-id 1}) "Invalid task")))
     (testing "Doesn't insert with missing description"
-      (is (=
-           (:status (b/add! {:title "abc" :profile-id 1}))
-           422)))
+      (is (= (b/add! {:title "abc" :profile-id 1}) "Invalid task")))
     (testing "Doesn't insert with missing profile-id"
-      (is (=
-           (:status (b/add! {:title "abc" :description "abc"}))
-           422)))))
+      (is (= (b/add! {:title "abc" :description "abc"}) "Invalid task")))))
 
 (deftest Filtering
   (with-redefs [b/filter-tasks (fn [pred]

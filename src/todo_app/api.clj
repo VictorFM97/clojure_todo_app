@@ -20,17 +20,17 @@
     (context "/todo" []
       (POST "/add" req (response (tasks/add! (:body req))))
       (DELETE "/delete" req (response (tasks/update! (:id (:body req)) :deleted true)))
-      (PUT "/done/" req (tasks/update!) (:id req) :done (:done req))
+      (PUT "/done/" req (response (tasks/update!) (:id req) :done (:done req)))
       (context "/:id{[0-9]+}" [id :<< as-int]
-        (GET "/most-recent" [] (tasks/get-most-recent id))
+        (GET "/most-recent" [] (response (tasks/get-most-recent id)))
         (GET "/all" [] (response (tasks/get-all id)))
-        (GET "/" [] (tasks/get-by-id id))))
+        (GET "/" [] (response (tasks/get-by-id id)))))
     (not-found "404 not found")))
 
 (defn create-api []
   (-> routes
       ; (defaults/wrap-defaults defaults/api-defaults)
-             (wrap-json-body {:keywords? true})
-             (wrap-json-response)
-             (wrap-cors :access-control-allow-origin [#"http://localhost:8000"]
-                        :access-control-allow-methods [:get :put :post :delete])))
+      (wrap-json-body {:keywords? true})
+      (wrap-json-response)
+      (wrap-cors :access-control-allow-origin [#"http://localhost:8000"]
+                 :access-control-allow-methods [:get :put :post :delete])))

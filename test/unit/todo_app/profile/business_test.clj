@@ -8,9 +8,9 @@
 
 (deftest adding
   (testing "Shouldn't add invalid profile"
-    (is (= (:status (b/add! {})) 422))
-    (is (= (:status (b/add! {:name 1})) 422))
-    (is (= (:status (b/add! {:name ""})) 422))))
+    (is (= (b/add! {}) "Invalid profile"))
+    (is (= (b/add! {:name 1}) "Invalid profile"))
+    (is (= (b/add! {:name ""}) "Invalid profile"))))
 
 (deftest get-specific
   (testing "should retrieve specific profile"
