@@ -16,5 +16,3 @@
 (deftest get-profiles
   (testing "Should return all profiles"
     (is (= (count (r/get-profiles)) 2))))
-
-(r/clear!)

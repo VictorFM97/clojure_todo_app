@@ -7,11 +7,7 @@
            :profile-id 1
            :deleted false})
 
-(defn valid-test
-  [task]
-  (is (false? (v/valid? task))))
-
-(deftest Valid
+(deftest valid
   (testing "Is task valid"
     (is (true? (v/valid? task))))
   (testing "Is task invalid"

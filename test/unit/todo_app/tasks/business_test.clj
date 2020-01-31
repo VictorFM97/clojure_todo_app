@@ -7,7 +7,7 @@
                     {:id 3 :profile-id 2 :title "abc" :description "def"}
                     {:id 4 :profile-id 3 :title "abc" :description "def"}])
 
-(deftest Adding
+(deftest adding
   (testing "Add! function"
     (testing "Doesn't insert with missing title"
       (is (= (b/add! {:description "abc" :profile-id 1}) "Invalid task")))
@@ -16,7 +16,7 @@
     (testing "Doesn't insert with missing profile-id"
       (is (= (b/add! {:title "abc" :description "abc"}) "Invalid task")))))
 
-(deftest Filtering
+(deftest filtering
   (with-redefs [b/filter-tasks (fn [pred]
                                  (filter pred example-tasks))]
     (testing "get-all"

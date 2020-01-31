@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [todo-app.tasks.repository :as r]))
 
-(deftest Adding
+(deftest adding
   (testing "Adding new tasks"
     (let [task (r/add! {:title "abc" :description "def" :profile-id 1})]
       (is (and (= (:id task) 1)
@@ -18,8 +18,6 @@
                (= (:title task) "123")
                (= (:description task) "456"))))))
 
-(deftest GetTasks
+(deftest get-tasks
   (testing "Should return all tasks"
     (is (= (count (r/get-tasks)) 2))))
-
-(r/clear!)

@@ -23,14 +23,16 @@
       (POST "/add" req (response (profiles/add! (:body req))))
       (context "/:id{[0-9]+}" [id :<< as-int]
         (GET "/" [] (response (profiles/get-by-id id)))))
-    (context "/todo" []
+    (context "/task" []
       (POST "/add" req (response (tasks/add! (:body req))))
       (DELETE "/delete" req (response (tasks/update! (:id (:body req)) :deleted true)))
       (PUT "/done/" req (response (tasks/update!) (:id req) :done (:done req)))
-      (context "/:id{[0-9]+}" [id :<< as-int]
-        (GET "/most-recent" [] (response (tasks/get-most-recent id)))
-        (GET "/all" [] (response (tasks/get-all id)))
-        (GET "/" [] (response (tasks/get-by-id id))))))
+      (context "/:profile-id{[0-9]+}" [profile-id :<< as-int]
+        (GET "/most-recent" [] (response (tasks/get-most-recent profile-id)))
+        (GET "/all" [] (response (tasks/get-all profile-id))))
+      ; (context "/:id{[0-9]+}" [id :<< as-int]
+      ;   (GET "/" [] (response (tasks/get-by-id id))))
+      ))
   (not-found "404 not found"))
 
 (def api (-> routes
