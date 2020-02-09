@@ -24,10 +24,10 @@
 (facts "Profile routes"
        (fact "sending invalid profile"
              (let [response (mock-request :post "/api/profile/add" {:name ""})]
-               (:status response) => 403
+               (:status response) => 422
                (:body response) => "Invalid profile")
              (let [response (mock-request :post "/api/profile/add" {})]
-               (:status response) => 403
+               (:status response) => 422
                (:body response) => "Invalid profile"))
        (fact "sending valid profile"
              (let [response (mock-request :post "/api/profile/add" {:name "Victor"})
@@ -56,16 +56,16 @@
 (facts "tasks"
        (fact "sending invalid task"
              (let [response (mock-request :post "/api/task/add" {:profile-id 0})]
-               (:status response) => 403
+               (:status response) => 422
                (:body response) => "Invalid task")
              (let [response (mock-request :post "/api/task/add" {:profile-id 1 :title ""})]
-               (:status response) => 403
+               (:status response) => 422
                (:body response) => "Invalid task")
              (let [response (mock-request :post "/api/task/add" {:profile-id 1 :title "abc" :description ""})]
-               (:status response) => 403
+               (:status response) => 422
                (:body response) => "Invalid task")
              (let [response (mock-request :post "/api/task/add" {})]
-               (:status response) => 403
+               (:status response) => 422
                (:body response) => "Invalid task"))
        (fact "sending valid task"
              (let [response (mock-request :post "/api/task/add" {:profile-id 1 :title "abc" :description "def"})

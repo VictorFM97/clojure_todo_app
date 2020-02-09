@@ -14,7 +14,7 @@
 ; TODO: About the responses, maybe send a :422 and handle it with a middleware or with an if, on a specific function
 
 (defn invalid-entity [body]
-  {:status 403 :body body})
+  {:status 422 :body body})
 
 (defroutes routes
   (context "/api" []
@@ -48,7 +48,7 @@
   (-> routes; (defaults/wrap-defaults defaults/api-defaults)
       (wrap-json-body {:keywords? true})
       (wrap-json-response)
-      (wrap-cors :access-control-allow-origin [#"http://localhost:8000"] 
+      (wrap-cors :access-control-allow-origin [#"http://localhost:8000"]
                  :access-control-allow-methods [:get :put :post :delete])))
 
 (defn create-api [] api)
