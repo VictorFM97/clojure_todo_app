@@ -14,4 +14,4 @@
   [profile]
   (if (valid? profile)
     (repo/add! profile)
-    "Invalid profile"))
+    false))

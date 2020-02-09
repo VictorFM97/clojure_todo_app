@@ -32,7 +32,7 @@
   [task]
   (if (valid? task)
     (repo/add! task)
-    "Invalid task"))
+    false))
 
 (defn update!
   [id key value]
