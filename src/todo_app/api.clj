@@ -32,9 +32,13 @@
           (response resp)
           (invalid-entity "Invalid task")))
       (DELETE "/delete" req
-        (response (tasks/update! (:id (:body req)) :deleted true)))
-      (PUT "/done/" req
-        (response (tasks/update!) (:id req) :done (:done req)))
+        (if-let [resp (tasks/update! (:id (:body req)) :deleted true)]
+          (response resp)
+          (not-found "Task not found")))
+      (PUT "/done" req
+        (if-let [resp (tasks/update! (:id (:body req)) :done (:done (:body req)))]
+          (response resp)
+          (not-found "Task not found")))
       (context "/:profile-id{[0-9]+}" [profile-id :<< as-int]
         (GET "/most-recent" []
           (response (tasks/get-most-recent profile-id)))

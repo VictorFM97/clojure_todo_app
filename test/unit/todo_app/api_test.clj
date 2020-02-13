@@ -29,6 +29,7 @@
              (let [response (mock-request :post "/api/profile/add" {})]
                (:status response) => 422
                (:body response) => "Invalid profile"))
+
        (fact "sending valid profile"
              (let [response (mock-request :post "/api/profile/add" {:name "Victor"})
                    body (json-to-map (:body response))]
@@ -40,6 +41,7 @@
                (:status response) => 200
                (and (= (:id body) 2)
                     (= (:name body) "Carol")) => true))
+
        (fact "fetching profiles"
              (let [response (mock-request :get "/api/profile/1/" {})
                    body (json-to-map (:body response))]
@@ -67,6 +69,7 @@
              (let [response (mock-request :post "/api/task/add" {})]
                (:status response) => 422
                (:body response) => "Invalid task"))
+
        (fact "sending valid task"
              (let [response (mock-request :post "/api/task/add" {:profile-id 1 :title "abc" :description "def"})
                    body (json-to-map (:body response))]
@@ -95,8 +98,41 @@
                     (= (:description body) "456")
                     (false? (:deleted body))
                     (false? (:done body))) => true))
-       (fact "deleting task"); TODO: Create tests
-       (fact "marking task as done/undone"); TODO: Create tests
+
+       (fact "deleting task that exists"
+             (let [response (mock-request :delete "/api/task/delete" {:id 1})
+                   body (json-to-map (:body response))]
+               (:status response) => 200
+               (and (= (:id body) 1)
+                    (true? (:deleted body))) => true)
+             (let [response (mock-request :delete "/api/task/delete" {:id 2})
+                   body (json-to-map (:body response))]
+               (:status response) => 200
+               (and (= (:id body) 2)
+                    (true? (:deleted body))) => true))
+
+       (fact "deleting task that doesn't exists"
+             (let [response (mock-request :delete "/api/task/delete" {:id 999})]
+               (:status response) => 404
+               (:body response) => "Task not found"))
+
+       (fact "marking task that exists as done/undone"
+             (let [response (mock-request :put "/api/task/done" {:id 2 :done true})
+                   body (json-to-map (:body response))]
+               (:status response) => 200
+               (and (= (:id body) 2)
+                    (true? (:done body))) => true)
+             (let [response (mock-request :put "/api/task/done" {:id 2 :done false})
+                   body (json-to-map (:body response))]
+               (:status response) => 200
+               (and (= (:id body) 2)
+                    (false? (:done body))) => true))
+
+       (fact "marking task that doesn't exists as done/undone"
+             (let [response (mock-request :put "/api/task/done" {:id 999})]
+               (:status response) => 404
+               (:body response) => "Task not found"))
+
        (facts "getters"
               (fact "getting last task added of profile"
                     (let [response (mock-request :get "/api/task/1/most-recent" {})

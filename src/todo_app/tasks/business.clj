@@ -22,12 +22,6 @@
   [id]
   (first (filter-tasks #(= id (:id %)))))
 
-(defn execute-action
-  [should-execute action message]
-  (if (true? should-execute)
-    message
-    (action)))
-
 (defn add!
   [task]
   (if (valid? task)
@@ -36,10 +30,7 @@
 
 (defn update!
   [id key value]
-  (let [ret (execute-action
-             (deleted? (get-by-id id))
-             #(repo/update! id key value)
-             "Task is already deleted")]
-    (if (string? ret)
-      ret
-      (get-by-id id))))
+  (if-let [task  (get-by-id id)]
+    (do (repo/update! id key value)
+        (merge task {key value}))
+    false))

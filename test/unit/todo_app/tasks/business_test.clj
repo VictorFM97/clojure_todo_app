@@ -2,22 +2,27 @@
   (:require [midje.sweet :refer :all]
             [todo-app.tasks.business :as b]))
 
-(def example-tasks [{:id 1 :profile-id 1 :title "abc" :description "def"}
-                    {:id 2 :profile-id 1 :title "abc" :description "def"}
-                    {:id 3 :profile-id 2 :title "abc" :description "def"}
-                    {:id 4 :profile-id 3 :title "abc" :description "def"}])
+(def example-tasks [{:id 1 :profile-id 1 :title "abc" :description "def" :done false :deleted false}
+                    {:id 2 :profile-id 1 :title "abc" :description "def" :done false :deleted false}
+                    {:id 3 :profile-id 2 :title "abc" :description "def" :done false :deleted false}
+                    {:id 4 :profile-id 3 :title "abc" :description "def" :done false :deleted false}])
 
-(facts "Add! function"
-       (fact "Doesn't insert with missing title"
-             (b/add! {:description "abc" :profile-id 1}) => false)
-       (fact "Doesn't insert with missing description"
-             (b/add! {:title "abc" :profile-id 1}) => false)
-       (fact "Doesn't insert with missing profile-id"
-             (b/add! {:title "abc" :description "abc"}) => false))
-
-(facts "filtering"
+(facts "Manipulating tasks"
        (with-redefs [b/filter-tasks (fn [pred]
                                       (filter pred example-tasks))]
+         (fact "Doesn't insert with missing title"
+               (b/add! {:description "abc" :profile-id 1}) => false)
+         (fact "Doesn't insert with missing description"
+               (b/add! {:title "abc" :profile-id 1}) => false)
+         (fact "Doesn't insert with missing profile-id"
+               (b/add! {:title "abc" :description "abc"}) => false)
+         (fact "Shouldn't update if task doesn't exists"
+               (b/update! 6 :done true) => false)
+         (fact "Should update correct value"
+               (:done (b/update! 1 :done true)) => true
+               (:done (b/update! 1 :done false)) => false
+               (:deleted (b/update! 2 :deleted true)) => true
+               (:deleted (b/update! 2 :deleted false)) => false)
          (fact "get-all"
                (fact "Should return filtered results"
                      (count (b/get-all 1)) => 2
