@@ -8,7 +8,8 @@
 
 (defn base-filter
   [id]
-  #(= id (:profile-id %)))
+  #(and (= id (:profile-id %))
+        (false? (:deleted %))))
 
 (defn get-all
   [profile-id]

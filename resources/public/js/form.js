@@ -129,8 +129,26 @@ const markTaskAsDone = (el, id) => {
     httpRequest('task/done', options, handleMarkAsDone);
 };
 
-const deleteTask = (el) => {
-    console.log(el);
+const deleteTask = (el, id) => {
+    const handleDeleteTask = (response) => {
+        if (response.status === 404) {
+            alert('task not found');
+        } else {
+            el.parentNode.remove();
+        }
+    };
+
+    const body = {
+        id,
+    };
+
+    const options = {
+        method: "DELETE",
+        contentType: "application/json",
+        body,
+    }
+
+    httpRequest('task/delete', options, handleDeleteTask);
 };
 
 const setCookie = (name, value, expiration) => {
@@ -166,7 +184,7 @@ const createTaskElement = (task) => {
 
     const deleteButton = clone.querySelector(".delete");
     deleteButton.setAttribute("task-id", task.id);
-    deleteButton.addEventListener("change", (event) => deleteTask(event.target, task.id));
+    deleteButton.addEventListener("click", (event) => deleteTask(event.target, task.id));
 
     return clone;
 }
