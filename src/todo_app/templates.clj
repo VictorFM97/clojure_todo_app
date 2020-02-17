@@ -16,6 +16,14 @@
     [:span#name-text]]
    [:button#create-profile "Submit"]))
 
+(defn todo-list-element []
+  (html [:li#task-clone.hidden
+         [:input.done {:type "checkbox"}]
+         [:p.title]
+         [:p.description]
+         [:button.save "Save"]
+         [:button.delete "Delete"]]))
+
 (defn todo-list []
   (html [:div.todo-list {:style "display: none"}
          [:div.input-group
@@ -25,14 +33,6 @@
          [:button.add-task "+"]
          [:ul
           (todo-list-element)]]))
-
-(defn todo-list-element []
-  (html [:li#task-clone.hidden
-         [:input.done {:type "checkbox"}]
-         [:p.title]
-         [:p.description]
-         [:button.save "Save"]
-         [:button.delete "Delete"]]))
 
 (defn index []
   (render-html (html [:div (profile) (todo-list)])))

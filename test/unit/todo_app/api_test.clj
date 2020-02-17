@@ -104,11 +104,6 @@
                    body (json-to-map (:body response))]
                (:status response) => 200
                (and (= (:id body) 1)
-                    (true? (:deleted body))) => true)
-             (let [response (mock-request :delete "/api/task/delete" {:id 2})
-                   body (json-to-map (:body response))]
-               (:status response) => 200
-               (and (= (:id body) 2)
                     (true? (:deleted body))) => true))
 
        (fact "deleting task that doesn't exists"
@@ -153,7 +148,7 @@
                     (let [response (mock-request :get "/api/task/1/all" {})
                           body (json-to-map (:body response))]
                       (:status response) => 200
-                      (count body) => 2)
+                      (count body) => 1)
                     (let [response (mock-request :get "/api/task/2/all" {})
                           body (json-to-map (:body response))]
                       (:status response) => 200
