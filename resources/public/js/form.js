@@ -9,7 +9,7 @@ const httpRequest = (endpoint, options, callback) => {
     const url = baseUrl + endpoint;
 
     Http.onreadystatechange = (e) => {
-        if (e.target.readyState == 4)
+        if (e.target.readyState === 4)
             callback(e.target);
     };
 
@@ -29,8 +29,7 @@ $("#create-profile").addEventListener('click', () => {
     };
 
     const handleProfileCreation = (response) => {
-        const responseData = JSON.parse(response.responseText);
-        const addedProfile = responseData[responseData.length - 1];
+        const addedProfile = JSON.parse(response.responseText);
 
         $("#name-text").innerText = addedProfile.name;
         setCookie('profileId', addedProfile.id);
@@ -75,7 +74,7 @@ $('.add-task').addEventListener('click', () => {
         $(".todo-list ul").append(createTaskElement(task));
     }
 
-    httpRequest('todo/add', options, handlerAddTask);
+    httpRequest('task/add', options, handlerAddTask);
 });
 
 const enableProfile = (profileId, findProfile) => {
@@ -99,13 +98,40 @@ const enableProfile = (profileId, findProfile) => {
                 list.append(a[i]);
         }
 
-        httpRequest('todo/' + profileId + '/all', options, handleFindTasks);
+        httpRequest('task/' + profileId + '/all', options, handleFindTasks);
     }
 
     $("#name-input").style.display = 'none';
     $("#create-profile").style.display = 'none';
     $(".todo-list").style.display = 'block';
 }
+
+const markTaskAsDone = (el, id) => {
+
+    const handleMarkAsDone = (response) => {
+        if (response.status === 404) {
+            el.checked = false;
+            alert('task not found');
+        }
+    };
+
+    const body = {
+        id,
+        done: el.checked
+    };
+
+    const options = {
+        method: "PUT",
+        contentType: "application/json",
+        body,
+    }
+
+    httpRequest('task/done', options, handleMarkAsDone);
+};
+
+const deleteTask = (el) => {
+    console.log(el);
+};
 
 const setCookie = (name, value, expiration) => {
     document.cookie += name + '=' + value + ';';
@@ -124,22 +150,25 @@ const getCookie = (name) => {
 }
 
 const createTaskElement = (task) => {
-    const li = document.createElement("li");
-    const p_title = document.createElement("p");
-    const p_description = document.createElement("p");
-    const button_update = document.createElement("button");
-    const button_delete = document.createElement("button");
+    const clone = $("#task-clone").cloneNode(true);
+    clone.classList.remove("hidden");
+    clone.querySelector(".title").innerText = task.title;
+    clone.querySelector(".description").innerText = task.description;
 
-    p_title.innerText = task.title;
-    p_description.innerText = task.description;
-    button_update.innerText = "Save";
-    button_delete.innerText = "Delete";
+    const doneCheck = clone.querySelector(".done");
+    doneCheck.addEventListener("change", (event) => markTaskAsDone(event.target, task.id));
+    doneCheck.checked = task.done;
 
-    button_update.setAttribute('task-id', task.id);
-    button_delete.setAttribute('task-id', task.id);
+    const saveButton = clone.querySelector(".save");
+    saveButton.classList.add("hidden");
+    // saveButton.setAttribute("task-id", task.id);
+    // saveButton.addEventListener("change", updateTask);
 
-    li.append(p_title, p_description, button_update, button_delete);
-    return li;
+    const deleteButton = clone.querySelector(".delete");
+    deleteButton.setAttribute("task-id", task.id);
+    deleteButton.addEventListener("change", (event) => deleteTask(event.target, task.id));
+
+    return clone;
 }
 
 {

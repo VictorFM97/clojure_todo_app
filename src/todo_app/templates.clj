@@ -3,9 +3,9 @@
 
 (defn render-html [content]
   (html [:html
-         [:head]
-         [:body
-          content]
+         [:head
+          [:link {:rel "stylesheet" :href "/css/main.css"}]]
+         [:body content]
          [:script {:src "/js/form.js" :type "text/javascript"}]]))
 
 (defn profile []
@@ -23,14 +23,16 @@
          [:div.input-group
           [:input#task-description {:type "text"}]]
          [:button.add-task "+"]
-         [:ul]]))
+         [:ul
+          (todo-list-element)]]))
 
-(defn todo-list-element [{title :title description :description}]
-  (html [:li
-         [:p title]
-         [:p description]
-         [:button "Save"]
-         [:button "Delete"]]))
+(defn todo-list-element []
+  (html [:li#task-clone.hidden
+         [:input.done {:type "checkbox"}]
+         [:p.title]
+         [:p.description]
+         [:button.save "Save"]
+         [:button.delete "Delete"]]))
 
 (defn index []
   (render-html (html [:div (profile) (todo-list)])))
