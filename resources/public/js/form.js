@@ -48,14 +48,13 @@ $("#create-profile").addEventListener('click', () => {
 $('.add-task').addEventListener('click', () => {
     const profileId = getCookie('profileId');
 
-    if (!profileId)
-        return alert('ababa');
+    if (!profileId) {
+        alert('Please reload the page and log in again');
+        location.reload();
+    }
 
     const title = getValueFromInput('#task-title');
     const description = getValueFromInput('#task-description');
-
-    if (!title || !description)
-        return alert('Title and Description must be filled');
 
     const body = {
         'profile-id': parseInt(profileId),
@@ -70,8 +69,12 @@ $('.add-task').addEventListener('click', () => {
     }
 
     const handlerAddTask = (response) => {
-        const task = JSON.parse(response.responseText);
-        $(".todo-list ul").append(createTaskElement(task));
+        if (response.status === 422) {
+            alert("Title and Description must be filled");
+        } else {
+            const task = JSON.parse(response.responseText);
+            $(".todo-list ul").append(createTaskElement(task));
+        }
     }
 
     httpRequest('task/add', options, handlerAddTask);
@@ -101,8 +104,9 @@ const enableProfile = (profileId, findProfile) => {
         httpRequest('task/' + profileId + '/all', options, handleFindTasks);
     }
 
-    $("#name-input").style.display = 'none';
-    $("#create-profile").style.display = 'none';
+    $("h2").classList.add("hidden");
+    $("#name-input").classList.add("hidden");
+    $("#create-profile").classList.add("hidden");
     $(".todo-list").style.display = 'block';
 }
 

@@ -1,3 +1,85 @@
+* {
+    letter-spacing: .5px;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f9f9f9;
+}
+
 .hidden {
     display: none;
+}
+
+#container {
+    width: 50%;
+    margin: 0 auto;
+    max-width: 450px;
+    padding: 5px 0;
+}
+
+input:not([type="checkbox"]) {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+button {
+    padding: 5px;
+    border-radius: 5px;
+    border-style: initial;
+    margin-top: 10px;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+button:hover {
+    border-color: black;
+}
+
+button.blue {
+    background-color: #bbe0ff;
+    color: white;
+}
+
+button.red {
+    background-color: #ffadad;
+    color: #fff;
+}
+
+#name-text {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.input-group {
+    margin-top: 10px;
+}
+
+ul {
+    list-style: none;
+    margin-top: 10px;
+}
+
+ul li {
+    padding: 10px;
+    border-bottom: 1px dotted black;
+}
+
+ul li:last-of-type {
+    border: none;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 5px;
+}
+
+.description {
+    margin: 10px 0 0;
+    font-size: 1rem;
 }

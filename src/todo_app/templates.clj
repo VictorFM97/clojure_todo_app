@@ -14,25 +14,27 @@
    [:div
     [:input#name-input {:type "text"}]
     [:span#name-text]]
-   [:button#create-profile "Submit"]))
+   [:button#create-profile.blue "Submit"]))
 
 (defn todo-list-element []
   (html [:li#task-clone.hidden
          [:input.done {:type "checkbox"}]
-         [:p.title]
+         [:span.title]
          [:p.description]
          [:button.save "Save"]
-         [:button.delete "Delete"]]))
+         [:button.delete.red "Delete"]]))
 
 (defn todo-list []
   (html [:div.todo-list {:style "display: none"}
          [:div.input-group
+          [:label {:for "task-title"} "Title"]
           [:input#task-title {:type "text"}]]
          [:div.input-group
+          [:label {:for "task-description"} "Description"]
           [:input#task-description {:type "text"}]]
-         [:button.add-task "+"]
+         [:button.add-task.blue "Add task"]
          [:ul
           (todo-list-element)]]))
 
 (defn index []
-  (render-html (html [:div (profile) (todo-list)])))
+  (render-html (html [:div#container (profile) (todo-list)])))
