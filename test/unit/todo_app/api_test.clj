@@ -52,8 +52,7 @@
                    body (json-to-map (:body response))]
                (:status response) => 200
                (and (= (:name body) "Carol")
-                    (= (:id body) 2)) => true))
-       (profile/clear!))
+                    (= (:id body) 2)) => true)))
 
 (facts "tasks"
        (fact "sending invalid task"
@@ -155,4 +154,5 @@
                       (count body) => 1))
               (fact "getting specific task"); TODO: Create tests
               )
-       (tasks/clear!))
+       (tasks/clear!)
+       (profile/clear!))

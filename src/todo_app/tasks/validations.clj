@@ -1,4 +1,5 @@
-(ns todo-app.tasks.validations)
+(ns todo-app.tasks.validations
+  (:require [todo-app.profile.business :refer [get-by-id]]))
 
 (defn deleted?
   [task]
@@ -14,4 +15,5 @@
          (string? description)
          (> (count description) 0)
          (number? profile-id)
-         (> profile-id 0))))
+         (> profile-id 0)
+         (not (nil? (get-by-id profile-id))))))
