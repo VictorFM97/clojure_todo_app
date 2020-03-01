@@ -29,11 +29,15 @@ $("#create-profile").addEventListener('click', () => {
     };
 
     const handleProfileCreation = (response) => {
-        const addedProfile = JSON.parse(response.responseText);
+        if (response.status === 422) {
+            alert("Invalid name");
+        } else {
+            const addedProfile = JSON.parse(response.responseText);
 
-        $("#name-text").innerText = addedProfile.name;
-        setCookie('profileId', addedProfile.id);
-        enableProfile(addedProfile.id);
+            $("#name-text").innerText = addedProfile.name;
+            setCookie('profileId', addedProfile.id);
+            enableProfile(addedProfile.id);
+        }
     };
 
     const options = {
