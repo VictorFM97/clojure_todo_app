@@ -10,10 +10,9 @@
 
 (defn simulate-request
   [endpoint method body]
-  {:headers []
-   :body body
-   :url endpoint
-   :method method})
+  {:body (java.io.StringBufferInputStream. body)
+   :uri endpoint
+   :request-method method})
 
 (facts "Format date function"
        (fact "Format date with no args should return formated date as yyyy-MM-dd"
